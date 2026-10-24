@@ -31,7 +31,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl  p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
             <div className="flex h-full w-full items-center justify-center ">
-              <Code2 className="h-5 w-5 text-indigo-200 group-hover:text-cyan-300 transition-colors" />
+              <Code2 className="h-5 w-5  group-hover:text-cyan-300 transition-colors" />
             </div>
           </div>
           <div className="flex flex-col">
@@ -79,19 +79,14 @@ export default function Navbar() {
 
         {/* User Auth CTAs */}
         <div className="hidden sm:flex items-center gap-3">
-          <a
-            href="#join"
-            className="text-sm font-medium text-slate-300 hover:text-white transition-colors px-2 py-1.5"
-          >
-            Sign in
-          </a>
-          <a
-            href="#join"
+         
+          <Link
+            href="/auth?mode=register"
             className="relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-600/30 hover:from-indigo-600 hover:to-indigo-700 hover:shadow-indigo-600/50 transition-all duration-200 active:scale-95"
           >
             
             <span>Join Devora</span>
-          </a>
+          </Link>
         </div>
 
         {/* Mobile menu button */}
@@ -112,7 +107,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950/95 px-4 pt-2 pb-6 space-y-3">
+        <div className="md:hidden border-b border-slate-800 bg-[#0B0B0F] px-4 pt-2 pb-6 space-y-3">
           <div className="relative mb-3">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
             <input
@@ -132,20 +127,14 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-800/80 hover:text-white"
                 >
-                  <Icon className="h-5 w-5 text-indigo-400" />
+                  <Icon className="h-5 w-5 text-slate-400" />
                   {link.name}
                 </a>
               );
             })}
           </div>
           <div className="pt-4 border-t border-slate-800/80 flex flex-col gap-2">
-            <a
-              href="#join"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 rounded-lg border border-slate-700 text-sm font-medium text-slate-200 hover:bg-slate-800"
-            >
-              Sign In
-            </a>
+           
             <a
               href="#join"
               onClick={() => setMobileMenuOpen(false)}

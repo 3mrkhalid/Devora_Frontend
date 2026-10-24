@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import {
   Mail,
   Lock,
@@ -8,9 +9,18 @@ import {
   Eye,
   EyeOff,
   Check,
+  AlertCircle,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
+import { loginHandler } from "@/api/auth/login";
+import { toAuthErrorMessage } from "@/api/auth/errors";
+import { setAccessToken } from "@/api/conf_global/axios";
+import {
+  normalizeEmail,
+  validateEmail,
+  validatePassword,
+} from "../_lib/validation";
 
 type LoginProps = {
   onSwitchToRegister: () => void;
@@ -21,21 +31,57 @@ export default function Login({
   onSwitchToRegister,
   onSwitchToForgotPassword,
 }: LoginProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (loading) return;
+
+    const normalizedEmail = normalizeEmail(email);
+    const emailError = validateEmail(normalizedEmail);
+    const passwordError = validatePassword(password);
+
     setSuccessMessage(null);
-    setTimeout(() => {
+    setErrorMessage(null);
+
+    if (emailError) {
+      setErrorMessage(emailError);
+      return;
+    }
+
+    if (passwordError) {
+      setErrorMessage(passwordError);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const token = await loginHandler({
+        email: normalizedEmail,
+        password,
+      });
+
+      setAccessToken(token);
+      setSuccessMessage("Signed in successfully! Redirecting...");
+      router.replace("/");
+    } catch (loginError) {
+      setErrorMessage(
+        toAuthErrorMessage(
+          loginError,
+          "We couldn't sign you in. Please try again."
+        )
+      );
       setLoading(false);
-      setSuccessMessage("Logged in successfully! Redirecting to feed...");
-    }, 1200);
+    }
   };
 
   return (
@@ -44,6 +90,16 @@ export default function Login({
         <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3.5 text-emerald-300 flex items-center gap-2 text-xs font-medium animate-fadeIn">
           <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
           <span>{successMessage}</span>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div
+          role="alert"
+          className="rounded-xl border border-rose-500/40 bg-rose-950/40 p-3.5 text-rose-200 flex items-center gap-2 text-xs font-medium animate-fadeIn"
+        >
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <span>{errorMessage}</span>
         </div>
       )}
 
@@ -81,20 +137,27 @@ export default function Login({
         </span>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <div>
           <label className="block text-xs font-medium text-slate-300 mb-1.5">
-            Email or Username
+            Email
           </label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
             <input
-              type="text"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              name="email"
               required
+              disabled={loading}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="dev@devora.io or @username"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errorMessage) setErrorMessage(null);
+              }}
+              placeholder="dev@devora.io"
+              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </div>
@@ -116,16 +179,23 @@ export default function Login({
             <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
             <input
               type={showPassword ? "text" : "password"}
+              name="password"
+              autoComplete="current-password"
               required
+              disabled={loading}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errorMessage) setErrorMessage(null);
+              }}
               placeholder="••••••••••••"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors"
+              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-300 cursor-pointer"
+              disabled={loading}
+              className="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -142,6 +212,7 @@ export default function Login({
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={loading}
               className="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500"
             />
             <span>Remember this device</span>
@@ -151,7 +222,8 @@ export default function Login({
         <button
           type="submit"
           disabled={loading}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 hover:from-indigo-600 hover:to-cyan-600 hover:shadow-indigo-600/50 transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
+          aria-busy={loading}
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 hover:from-indigo-600 hover:to-cyan-600 hover:shadow-indigo-600/50 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <span>{loading ? "Authenticating..." : "Sign In"}</span>
           {!loading && <ArrowRight className="h-4 w-4" />}

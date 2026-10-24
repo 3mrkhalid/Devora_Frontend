@@ -68,7 +68,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   };
 
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32 bg-[#0B0B0F]">
+    <section className="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-40 bg-[#0B0B0F]">
       {/* Background ambient light gradients */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px]  pointer-events-none rounded-full" />
       <div className="absolute top-10 right-10 w-72 h-72  pointer-events-none rounded-full" />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import {
   Mail,
   Lock,
@@ -9,16 +10,27 @@ import {
   Eye,
   EyeOff,
   Check,
+  AlertCircle,
   Layers,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
+import { registerHandler } from "@/api/auth/register";
+import { toAuthErrorMessage } from "@/api/auth/errors";
+import { setAccessToken } from "@/api/conf_global/axios";
+import {
+  normalizeEmail,
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} from "../_lib/validation";
 
 type RegisterProps = {
   onSwitchToLogin: () => void;
 };
 
 export default function Register({ onSwitchToLogin }: RegisterProps) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [handle, setHandle] = useState("");
   const [email, setEmail] = useState("");
@@ -28,17 +40,79 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (loading) return;
+
+    const username = handle.trim();
+    const normalizedEmail = normalizeEmail(email);
+    const usernameError = validateUsername(username);
+    const emailError = validateEmail(normalizedEmail);
+    const passwordError = validatePassword(password);
+
     setSuccessMessage(null);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccessMessage(
-        "Account created! Check your email to verify your handle."
+    setErrorMessage(null);
+
+    if (!name.trim()) {
+      setErrorMessage("Enter your full name.");
+      return;
+    }
+
+    if (usernameError) {
+      setErrorMessage(usernameError);
+      return;
+    }
+
+    if (emailError) {
+      setErrorMessage(emailError);
+      return;
+    }
+
+    if (passwordError) {
+      setErrorMessage(passwordError);
+      return;
+    }
+
+    if (!agreeTerms) {
+      setErrorMessage(
+        "Please agree to the Developer Code of Conduct, Terms of Service, and Privacy Policy."
       );
-    }, 1200);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await registerHandler({
+        username,
+        email: normalizedEmail,
+        password,
+      });
+
+      if (response.accessToken) {
+        setAccessToken(response.accessToken);
+        setSuccessMessage("Account created! Redirecting...");
+        router.replace("/dashboard");
+        return;
+      }
+
+      // The backend currently signs users in on registration, but do not
+      // assume it always will: if no token is returned, send them to sign in.
+      setSuccessMessage("Account created! Sign in to continue.");
+      setLoading(false);
+      onSwitchToLogin();
+    } catch (registerError) {
+      setErrorMessage(
+        toAuthErrorMessage(
+          registerError,
+          "We couldn't create your account. Please try again."
+        )
+      );
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,6 +121,16 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
         <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3.5 text-emerald-300 flex items-center gap-2 text-xs font-medium animate-fadeIn">
           <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
           <span>{successMessage}</span>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div
+          role="alert"
+          className="rounded-xl border border-rose-500/40 bg-rose-950/40 p-3.5 text-rose-200 flex items-center gap-2 text-xs font-medium animate-fadeIn"
+        >
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <span>{errorMessage}</span>
         </div>
       )}
 
@@ -84,7 +168,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
         </span>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3.5">
+      <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1">
@@ -94,11 +178,17 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               <User className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
               <input
                 type="text"
+                name="name"
+                autoComplete="name"
                 required
+                disabled={loading}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (errorMessage) setErrorMessage(null);
+                }}
                 placeholder="Ada Lovelace"
-                className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-3 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-3 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </div>
@@ -113,15 +203,20 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               </span>
               <input
                 type="text"
+                name="username"
+                autoComplete="username"
                 required
+                maxLength={30}
+                disabled={loading}
                 value={handle}
-                onChange={(e) =>
+                onChange={(e) => {
                   setHandle(
-                    e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "")
-                  )
-                }
+                    e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "")
+                  );
+                  if (errorMessage) setErrorMessage(null);
+                }}
                 placeholder="adalovelace"
-                className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-8 pr-3 text-xs font-mono text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-8 pr-3 text-xs font-mono text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </div>
@@ -135,11 +230,18 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
             <input
               type="email"
+              inputMode="email"
+              name="email"
+              autoComplete="email"
               required
+              disabled={loading}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errorMessage) setErrorMessage(null);
+              }}
               placeholder="ada@devora.io"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-3 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-3 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </div>
@@ -152,16 +254,23 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
             <input
               type={showPassword ? "text" : "password"}
+              name="password"
+              autoComplete="new-password"
               required
+              disabled={loading}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errorMessage) setErrorMessage(null);
+              }}
               placeholder="Minimum 8 characters"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-9 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-9 text-xs text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-slate-500 hover:text-slate-300 cursor-pointer"
+              disabled={loading}
+              className="absolute right-3 top-3 text-slate-500 hover:text-slate-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -182,7 +291,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <select
               value={primaryStack}
               onChange={(e) => setPrimaryStack(e.target.value)}
-              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-4 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none cursor-pointer"
+              disabled={loading}
+              className="w-full rounded-xl border border-slate-800 bg-slate-950/80 py-2.5 pl-9 pr-4 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
             >
               <option value="TypeScript">TypeScript & Next.js</option>
               <option value="Python">Python & AI/LLMs</option>
@@ -200,7 +310,11 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               type="checkbox"
               required
               checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
+              onChange={(e) => {
+                setAgreeTerms(e.target.checked);
+                if (errorMessage) setErrorMessage(null);
+              }}
+              disabled={loading}
               className="mt-0.5 rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500"
             />
             <span>
@@ -212,7 +326,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 hover:from-indigo-600 hover:to-cyan-600 hover:shadow-indigo-600/50 transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
+          aria-busy={loading}
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 hover:from-indigo-600 hover:to-cyan-600 hover:shadow-indigo-600/50 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <span>{loading ? "Creating Profile..." : "Create Free Account"}</span>
           {!loading && <ArrowRight className="h-4 w-4" />}
