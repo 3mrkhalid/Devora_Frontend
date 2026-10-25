@@ -130,32 +130,32 @@ export default function CommunityFeedPreview() {
   };
 
   return (
-    <section id="feed" className="py-24 bg-[#0B0B0F] relative border-t border-slate-800">
+    <section id="feed" className="relative border-t border-border bg-background py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-pattern opacity-60 pointer-events-none" />
         {/* Section title */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-cyan-700 mb-2 dark:text-cyan-400">
               <Flame className="w-4 h-4" />
               <span>Live Pulse</span>
             </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
               What developers are sharing right now
             </h2>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Real code, actual project launches, and meaningful technical conversations.
             </p>
           </div>
 
           {/* Interactive filter tabs */}
-          <div className="flex items-center gap-1.5 bg-slate-90/70 border border-slate-800 p-1 rounded-xl self-start md:self-auto overflow-x-auto max-w-full">
+          <div className="flex items-center gap-1.5 rounded-xl border border-border bg-muted p-1 self-start md:self-auto overflow-x-auto max-w-full">
             <button
               onClick={() => setFilter("all")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filter === "all"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Filter className="w-3.5 h-3.5" />
@@ -166,7 +166,7 @@ export default function CommunityFeedPreview() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filter === "snippet"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Code2 className="w-3.5 h-3.5" />
@@ -177,7 +177,7 @@ export default function CommunityFeedPreview() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filter === "launch"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Rocket className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export default function CommunityFeedPreview() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filter === "question"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <HelpCircle className="w-3.5 h-3.5" />
@@ -206,7 +206,7 @@ export default function CommunityFeedPreview() {
             return (
               <article
                 key={post.id}
-                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 sm:p-6 hover:border-slate-700/80 transition-all duration-200 max-w-4xl mx-auto"
+                className="mx-auto max-w-4xl rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:border-primary/30 sm:p-6 dark:shadow-none"
               >
                 {/* Author row */}
                 <div className="flex items-start justify-between">
@@ -216,27 +216,27 @@ export default function CommunityFeedPreview() {
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-white text-sm">
+                        <span className="font-semibold text-card-foreground text-sm">
                           {post.author.name}
                         </span>
                         {post.author.verified && (
-                          <CheckCircle className="h-3.5 w-3.5 text-indigo-400" />
+                          <CheckCircle className="h-3.5 w-3.5 text-primary" />
                         )}
-                        <span className="text-slate-400 text-xs">@{post.author.handle}</span>
-                        <span className="text-slate-600 text-xs hidden sm:inline">•</span>
-                        <span className="text-slate-400 text-xs hidden sm:inline">{post.time}</span>
+                        <span className="text-muted-foreground text-xs">@{post.author.handle}</span>
+                        <span className="text-subtle-foreground text-xs hidden sm:inline">•</span>
+                        <span className="text-muted-foreground text-xs hidden sm:inline">{post.time}</span>
                       </div>
-                      <p className="text-xs text-slate-400">{post.author.role}</p>
+                      <p className="text-xs text-muted-foreground">{post.author.role}</p>
                     </div>
                   </div>
 
-                  <span className="text-[11px] font-mono capitalize px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/60">
+                  <span className="text-[11px] font-mono capitalize px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
                     {post.category}
                   </span>
                 </div>
 
                 {/* Content body */}
-                <p className="mt-4 text-slate-200 text-sm leading-relaxed">
+                <p className="mt-4 text-card-foreground text-sm leading-relaxed">
                   {post.content}
                 </p>
 
@@ -263,7 +263,7 @@ export default function CommunityFeedPreview() {
                   {post.tags.map((tag, tIdx) => (
                     <span
                       key={tIdx}
-                      className="text-xs text-indigo-400 hover:text-indigo-300 cursor-pointer font-mono"
+                      className="text-xs text-primary hover:text-primary-hover cursor-pointer font-mono"
                     >
                       {tag}
                     </span>
@@ -271,12 +271,12 @@ export default function CommunityFeedPreview() {
                 </div>
 
                 {/* Engagement bar */}
-                <div className="mt-4 pt-3.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                <div className="mt-4 pt-3.5 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
                   <div className="flex items-center gap-6">
                     <button
                       onClick={() => toggleLike(post.id)}
                       className={`flex items-center gap-1.5 transition-colors ${
-                        isLiked ? "text-rose-400 font-semibold" : "hover:text-rose-400"
+                        isLiked ? "text-rose-600 font-semibold dark:text-rose-400" : "hover:text-rose-600 dark:hover:text-rose-400"
                       }`}
                     >
                       <Heart
@@ -287,12 +287,12 @@ export default function CommunityFeedPreview() {
                       <span>{currentLikes}</span>
                     </button>
 
-                    <button className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors">
+                    <button className="flex items-center gap-1.5 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
                       <MessageCircle className="w-4 h-4" />
                       <span>{post.comments} comments</span>
                     </button>
 
-                    <button className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                    <button className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                       <Share2 className="w-4 h-4" />
                       <span>{post.shares}</span>
                     </button>
@@ -300,7 +300,7 @@ export default function CommunityFeedPreview() {
 
                   <a
                     href="#join"
-                    className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
+                    className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <span>View full thread</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -315,7 +315,7 @@ export default function CommunityFeedPreview() {
         <div className="mt-8 text-center">
           <a
             href="#join"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted dark:shadow-none"
           >
             <span>Explore 14,000+ More Live Posts on Devora</span>
             <ExternalLink className="w-4 h-4" />

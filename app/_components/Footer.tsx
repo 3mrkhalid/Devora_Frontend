@@ -9,14 +9,14 @@ import Link from "next/link";
 
 function Footer(): React.JSX.Element {
   return (
-    <footer className="bg-[#0B0B0F] text-zinc-100">
+    <footer className="border-t border-border bg-background text-foreground">
       <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8 lg:pt-24">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold sm:text-5xl">
             Build. Connect. Collaborate.
           </h2>
 
-          <p className="mx-auto mt-4 max-w-md text-zinc-400">
+          <p className="mx-auto mt-4 max-w-md text-muted-foreground">
             Join Devora, connect with student developers, share ideas,
             and build meaningful projects together.
           </p>
@@ -30,39 +30,38 @@ function Footer(): React.JSX.Element {
           </Link>
         </div>
 
-        
-        <div className="mt-16 border-t border-white/10 pt-8 lg:mt-24">
+        <div className="mt-16 border-t border-border pt-8 lg:mt-24">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <p className="text-center text-sm text-zinc-500">
+            <p className="text-center text-sm text-muted-foreground">
               © 2026 Devora. All rights reserved.
             </p>
-        
+
             <nav
               aria-label="Footer navigation"
               className="flex flex-wrap justify-center gap-6 md:mr-30"
             >
               <Link
                 href="/privacy"
-                className="text-sm text-zinc-400 transition-colors hover:text-violet-400"
+                className="text-sm text-muted-foreground transition-colors hover:text-primary"
               >
                 Privacy Policy
               </Link>
-        
+
               <Link
                 href="/about_us"
-                className="text-sm text-zinc-400 transition-colors hover:text-violet-400"
+                className="text-sm text-muted-foreground transition-colors hover:text-primary"
               >
                 About Us
               </Link>
-        
+
               <Link
                 href="/contact_us"
-                className="text-sm text-zinc-400 transition-colors hover:text-violet-400"
+                className="text-sm text-muted-foreground transition-colors hover:text-primary"
               >
                 Contact Us
               </Link>
             </nav>
-        
+
             <ul className="flex items-center justify-center gap-5">
               <li>
                 <a
@@ -70,31 +69,31 @@ function Footer(): React.JSX.Element {
                   aria-label="GitHub"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-500 transition-colors hover:text-violet-400"
+                  className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   <FaGithub size={21} />
                 </a>
               </li>
-        
+
               <li>
                 <a
                   href="https://www.instagram.com"
                   aria-label="Instagram"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-500 transition-colors hover:text-violet-400"
+                  className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   <Camera size={21} />
                 </a>
               </li>
-        
+
               <li>
                 <a
                   href="https://www.facebook.com"
                   aria-label="Facebook"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-500 transition-colors hover:text-violet-400"
+                  className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   <MessageCircle size={21} />
                 </a>
@@ -104,8 +103,8 @@ function Footer(): React.JSX.Element {
         </div>
 
       </div>
-    
-    
+
+
     </footer>
   );
 }

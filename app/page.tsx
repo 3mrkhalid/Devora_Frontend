@@ -10,9 +10,8 @@ import Footer from "./_components/Footer";
 
 export default function Home() {
   return (
-    <div className="  bg-[#0B0B0F] font-sans ">
-      <main className="w-full items-center justify-between py-0.5  dark:bg-black sm:items-start">
-        
+    <div className="bg-background font-sans text-foreground">
+      <main className="w-full items-center justify-between bg-background py-0.5 sm:items-start">
         <Navbar />
         <HeroSection />
         <FeaturesSection />

@@ -59,14 +59,14 @@ export default function ForgotPasswordVerify({
     <div className="auth-step-enter space-y-5">
       <div>
         <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/10">
-          <ShieldCheck className="h-5 w-5 text-cyan-400" />
+          <ShieldCheck className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
           Check your inbox
         </h2>
-        <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+        <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
           If an account exists for{" "}
-          <span className="font-mono text-slate-200">{email}</span>, we sent a{" "}
+          <span className="font-mono text-foreground">{email}</span>, we sent a{" "}
           {RECOVERY_CODE_LENGTH}-digit recovery code.
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function ForgotPasswordVerify({
         <div>
           <label
             htmlFor="recovery-code"
-            className="mb-1.5 block text-xs font-medium text-slate-300"
+            className="mb-1.5 block text-xs font-medium text-secondary-foreground"
           >
             Recovery code
           </label>
@@ -105,10 +105,10 @@ export default function ForgotPasswordVerify({
             aria-describedby={
               error ? "recovery-code-error" : "recovery-code-note"
             }
-            className={`w-full rounded-xl border bg-slate-950/80 py-3 text-center font-mono text-lg tracking-[0.55em] text-white placeholder:text-slate-700 transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+            className={`w-full rounded-xl border bg-background py-3 text-center font-mono text-lg tracking-[0.55em] text-foreground placeholder:text-subtle-foreground transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
               error
-                ? "border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20"
-                : "border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20"
+                ? "border-destructive/60 focus:border-destructive focus:ring-destructive/20"
+                : "border-input focus:border-ring focus:ring-ring/20"
             }`}
           />
 
@@ -116,14 +116,14 @@ export default function ForgotPasswordVerify({
             <p
               id="recovery-code-error"
               role="alert"
-              className="mt-1.5 text-xs text-rose-300"
+              className="mt-1.5 text-xs text-destructive"
             >
               {error}
             </p>
           ) : (
             <p
               id="recovery-code-note"
-              className="mt-1.5 text-[11px] text-slate-500"
+              className="mt-1.5 text-[11px] text-muted-foreground"
             >
               Paste the {RECOVERY_CODE_LENGTH}-digit code from the email.
               Recovery codes can expire, so request a new one if needed.
@@ -154,17 +154,17 @@ export default function ForgotPasswordVerify({
         </button>
       </form>
 
-      <p className="text-center text-[11px] leading-relaxed text-slate-500">
+      <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
         Didn&apos;t receive a code? Check your spam folder, or go back and
         request a new one.
       </p>
 
-      <div className="flex items-center justify-between gap-3 border-t border-slate-800/80 pt-4">
+      <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
         <button
           type="button"
           onClick={onBack}
           disabled={submitting}
-          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Change email</span>
@@ -173,7 +173,7 @@ export default function ForgotPasswordVerify({
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="cursor-pointer text-xs font-medium text-indigo-400 transition-colors hover:text-indigo-300 hover:underline"
+          className="cursor-pointer text-xs font-medium text-primary transition-colors hover:text-primary-hover hover:underline"
         >
           Back to Sign In
         </button>

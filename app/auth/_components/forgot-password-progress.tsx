@@ -10,10 +10,10 @@ export default function ForgotPasswordProgress({
   return (
     <div className="space-y-2.5">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-slate-500">
+        <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-muted-foreground">
           Account recovery
         </span>
-        <span className="text-[11px] font-semibold text-indigo-300">
+        <span className="text-[11px] font-semibold text-primary">
           Step {currentStep} of 3
         </span>
       </div>
@@ -40,7 +40,7 @@ export default function ForgotPasswordProgress({
                   ? "bg-indigo-500"
                   : isCurrent
                     ? "bg-gradient-to-r from-indigo-500 to-cyan-400"
-                    : "bg-slate-800"
+                    : "bg-muted"
               }`}
             />
           );
@@ -56,10 +56,10 @@ export default function ForgotPasswordProgress({
               key={label}
               className={`transition-colors duration-300 ${
                 step === currentStep
-                  ? "font-semibold text-slate-200"
+                  ? "font-semibold text-foreground"
                   : step < currentStep
-                    ? "text-indigo-400"
-                    : "text-slate-600"
+                    ? "text-primary"
+                    : "text-subtle-foreground"
               }`}
             >
               {label}

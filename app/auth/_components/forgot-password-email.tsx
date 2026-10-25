@@ -62,14 +62,14 @@ export default function ForgotPasswordEmail({
     <div className="auth-step-enter space-y-5">
       <div>
         <div className="flex gap-5 items-center mb-5 ">
-          <div className="   flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10">
-            <KeyRound className="h-5 w-5 text-indigo-400" />
+          <div className="   flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
+            <KeyRound className="h-5 w-5 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
             Forgot password?
             </h2>
         </div>
-        <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+        <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
           Enter the email linked to your Devora account and we&apos;ll send a
           recovery code if an account exists.
         </p>
@@ -79,12 +79,12 @@ export default function ForgotPasswordEmail({
         <div>
           <label
             htmlFor="recovery-email"
-            className="mb-1.5 block text-xs font-medium text-slate-300"
+            className="mb-1.5 block text-xs font-medium text-secondary-foreground"
           >
             Email address
           </label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+            <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-subtle-foreground" />
             <input
               ref={inputRef}
               id="recovery-email"
@@ -104,10 +104,10 @@ export default function ForgotPasswordEmail({
               aria-describedby={
                 error ? "recovery-email-error" : "recovery-email-note"
               }
-              className={`w-full rounded-xl border bg-slate-950/80 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`w-full rounded-xl border bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                 error
-                  ? "border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20"
-                  : "border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20"
+                  ? "border-destructive/60 focus:border-destructive focus:ring-destructive/20"
+                  : "border-input focus:border-ring focus:ring-ring/20"
               }`}
             />
           </div>
@@ -116,14 +116,14 @@ export default function ForgotPasswordEmail({
             <p
               id="recovery-email-error"
               role="alert"
-              className="mt-1.5 text-xs text-rose-300"
+              className="mt-1.5 text-xs text-destructive"
             >
               {error}
             </p>
           ) : (
             <p
               id="recovery-email-note"
-              className="mt-1.5 text-[11px] text-slate-500"
+              className="mt-1.5 text-[11px] text-muted-foreground"
             >
               For your privacy, we never confirm whether an email is
               registered.
@@ -154,11 +154,11 @@ export default function ForgotPasswordEmail({
         </button>
       </form>
 
-      <div className="flex items-center justify-between gap-3 border-t border-slate-800/80 pt-4">
+      <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-white"
+          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Back to Sign In</span>
@@ -167,7 +167,7 @@ export default function ForgotPasswordEmail({
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="cursor-pointer text-xs font-medium text-indigo-400 transition-colors hover:text-indigo-300 hover:underline"
+          className="cursor-pointer text-xs font-medium text-primary transition-colors hover:text-primary-hover hover:underline"
         >
           Create new account
         </button>

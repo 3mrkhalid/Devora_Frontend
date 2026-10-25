@@ -92,14 +92,14 @@ export default function ForgotPasswordReset({
     <div className="auth-step-enter space-y-5">
       <div>
         <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10">
-          <ShieldCheck className="h-5 w-5 text-emerald-400" />
+          <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
           Set a new password
         </h2>
-        <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+        <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
           Choose a new password for{" "}
-          <span className="font-mono text-slate-200">{email}</span>.
+          <span className="font-mono text-foreground">{email}</span>.
         </p>
       </div>
 
@@ -107,12 +107,12 @@ export default function ForgotPasswordReset({
         <div>
           <label
             htmlFor="new-password"
-            className="mb-1.5 block text-xs font-medium text-slate-300"
+            className="mb-1.5 block text-xs font-medium text-secondary-foreground"
           >
             New password
           </label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+            <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-subtle-foreground" />
             <input
               ref={passwordRef}
               id="new-password"
@@ -132,10 +132,10 @@ export default function ForgotPasswordReset({
               aria-describedby={
                 passwordError ? "new-password-error" : "new-password-note"
               }
-              className={`w-full rounded-xl border bg-slate-950/80 py-2.5 pl-10 pr-11 text-sm text-white placeholder:text-slate-600 transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`w-full rounded-xl border bg-background py-2.5 pl-10 pr-11 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                 passwordError
-                  ? "border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20"
-                  : "border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20"
+                  ? "border-destructive/60 focus:border-destructive focus:ring-destructive/20"
+                  : "border-input focus:border-ring focus:ring-ring/20"
               }`}
             />
             <button
@@ -143,7 +143,7 @@ export default function ForgotPasswordReset({
               onClick={() => setShowPassword((visible) => !visible)}
               aria-label={showPassword ? "Hide password" : "Show password"}
               aria-pressed={showPassword}
-              className="absolute right-3.5 top-3.5 cursor-pointer text-slate-500 transition-colors hover:text-slate-300"
+              className="absolute right-3.5 top-3.5 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -157,14 +157,14 @@ export default function ForgotPasswordReset({
             <p
               id="new-password-error"
               role="alert"
-              className="mt-1.5 text-xs text-rose-300"
+              className="mt-1.5 text-xs text-destructive"
             >
               {passwordError}
             </p>
           ) : (
             <p
               id="new-password-note"
-              className="mt-1.5 text-[11px] text-slate-500"
+              className="mt-1.5 text-[11px] text-muted-foreground"
             >
               Use {PASSWORD_REQUIREMENTS}.
             </p>
@@ -174,12 +174,12 @@ export default function ForgotPasswordReset({
         <div>
           <label
             htmlFor="confirm-password"
-            className="mb-1.5 block text-xs font-medium text-slate-300"
+            className="mb-1.5 block text-xs font-medium text-secondary-foreground"
           >
             Confirm new password
           </label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+            <Lock className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-subtle-foreground" />
             <input
               ref={confirmationRef}
               id="confirm-password"
@@ -199,10 +199,10 @@ export default function ForgotPasswordReset({
               aria-describedby={
                 confirmationError ? "confirm-password-error" : undefined
               }
-              className={`w-full rounded-xl border bg-slate-950/80 py-2.5 pl-10 pr-11 text-sm text-white placeholder:text-slate-600 transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`w-full rounded-xl border bg-background py-2.5 pl-10 pr-11 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                 confirmationError
-                  ? "border-rose-500/60 focus:border-rose-500 focus:ring-rose-500/20"
-                  : "border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20"
+                  ? "border-destructive/60 focus:border-destructive focus:ring-destructive/20"
+                  : "border-input focus:border-ring focus:ring-ring/20"
               }`}
             />
             <button
@@ -214,7 +214,7 @@ export default function ForgotPasswordReset({
                   : "Show password confirmation"
               }
               aria-pressed={showConfirmation}
-              className="absolute right-3.5 top-3.5 cursor-pointer text-slate-500 transition-colors hover:text-slate-300"
+              className="absolute right-3.5 top-3.5 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
             >
               {showConfirmation ? (
                 <EyeOff className="h-4 w-4" />
@@ -228,7 +228,7 @@ export default function ForgotPasswordReset({
             <p
               id="confirm-password-error"
               role="alert"
-              className="mt-1.5 text-xs text-rose-300"
+              className="mt-1.5 text-xs text-destructive"
             >
               {confirmationError}
             </p>
@@ -238,7 +238,7 @@ export default function ForgotPasswordReset({
         {formError && (
           <div
             role="alert"
-            className="rounded-xl border border-rose-500/40 bg-rose-950/30 p-3 text-xs text-rose-200"
+            className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive"
           >
             {formError}
           </div>
@@ -267,12 +267,12 @@ export default function ForgotPasswordReset({
         </button>
       </form>
 
-      <div className="flex items-center justify-between gap-3 border-t border-slate-800/80 pt-4">
+      <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
         <button
           type="button"
           onClick={onStartOver}
           disabled={submitting}
-          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Get a new code</span>
@@ -281,7 +281,7 @@ export default function ForgotPasswordReset({
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="cursor-pointer text-xs font-medium text-indigo-400 transition-colors hover:text-indigo-300 hover:underline"
+          className="cursor-pointer text-xs font-medium text-primary transition-colors hover:text-primary-hover hover:underline"
         >
           Back to Sign In
         </button>

@@ -13,10 +13,10 @@ type LoginPageProps = {
 
 function AuthPageFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0B0B0F] text-white">
+    <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
       <div className="flex flex-col items-center gap-3">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-800 border-t-indigo-500" />
-        <p className="text-xs font-medium text-slate-500">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-border border-t-primary" />
+        <p className="text-xs font-medium text-muted-foreground">
           Loading authentication...
         </p>
       </div>
