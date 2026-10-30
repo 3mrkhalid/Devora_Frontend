@@ -31,7 +31,7 @@ type RegisterProps = {
 
 export default function Register({ onSwitchToLogin }: RegisterProps) {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [name, setName] = useState<string>("");
   const [handle, setHandle] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +52,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
     const usernameError = validateUsername(username);
     const emailError = validateEmail(normalizedEmail);
     const passwordError = validatePassword(password);
+    const fullname = name;
 
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -88,6 +89,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
     try {
       const response = await registerHandler({
         username,
+        fullname,
         email: normalizedEmail,
         password,
       });

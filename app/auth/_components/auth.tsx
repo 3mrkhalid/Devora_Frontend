@@ -66,10 +66,10 @@ export default function Auth({ initialMode = "login" }: AuthProps) {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-500/30 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-              <Code2 className="h-5 w-5 text-indigo-600/80 group-hover:text-cyan-600 transition-colors dark:text-indigo-400/80 dark:group-hover:text-cyan-300" />
+              <Code2 className="h-5 w-5 " />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+              <span className="text-xl font-bold tracking-tight text-foreground  transition-colors">
                 Devora
               </span>
             </div>

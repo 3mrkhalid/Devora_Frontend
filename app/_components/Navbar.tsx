@@ -29,14 +29,14 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl  p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl  p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200 ">
             <div className="flex h-full w-full items-center justify-center ">
-              <Code2 className="h-5 w-5 text-indigo-600 group-hover:text-cyan-600 dark:text-indigo-400 dark:group-hover:text-cyan-300 transition-colors" />
+              <Code2 className="h-5 w-5 text-white transition-colors " />
             </div>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+              <span className="text-xl font-bold tracking-tight text-foreground transition-colors">
                 Devora
               </span>
 

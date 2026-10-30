@@ -9,7 +9,7 @@ export const registerHandler = async (
 ): Promise<RegisterResponse> => {
   try {
     const { data } = await api.post<RegisterResponse>(
-      "/auth/api",
+      "api/auth/register",
       payload
     );
 

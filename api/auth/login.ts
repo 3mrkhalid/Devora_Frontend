@@ -15,7 +15,7 @@ export const loginHandler = async (
   payload: LoginPayload
 ): Promise<string> => {
   try {
-    const { data } = await api.post<AuthResponse>("auth/login", payload);
+    const { data } = await api.post<AuthResponse>("api/auth/login", payload);
 
     if (
       !data ||
